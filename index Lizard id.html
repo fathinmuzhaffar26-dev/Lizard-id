@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Lizard ID: jasa drafter, perhitungan RAB, dan konsultasi teknik untuk kontraktor, developer, dan pemilik bangunan.">
+<meta name="theme-color" content="#08131f">
+<meta property="og:title" content="Lizard ID">
+<meta property="og:description" content="Jasa drafter, hitung RAB, dan konsultasi teknik.">
+<meta property="og:url" content="https://lizard.my.id/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2308131f'/%3E%3Cpath d='M16 3l9 7 2 11-11 9-11-9 2-11z' fill='none' stroke='%234fe3c4' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M10 12l4 2M22 12l-4 2' stroke='%234fe3c4' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Lizard ID</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: drafting-sheet website. Hero pairs the pitch with a blueprint of the lizard mark and a title block; the rest are ruled sections like a drawing set. */
+  :root {
+    --bg: #edf2f7;
+    --surface: #f8fafc;
+    --fg: #0d2036;
+    --muted: #4c6178;
+    --line: #c3d0de;
+    --grid: #dbe4ed;
+    --accent: #00806b;
+    --accent-fg: #ffffff;
+    --dim: #b86a00;
+    --font-display: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Barlow", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #08131f; --surface: #0d1d2e; --fg: #e4edf6; --muted: #8ea5ba;
+      --line: #223b53; --grid: #0f2236; --accent: #4fe3c4; --accent-fg: #04201a; --dim: #ffb454;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #08131f; --surface: #0d1d2e; --fg: #e4edf6; --muted: #8ea5ba;
+    --line: #223b53; --grid: #0f2236; --accent: #4fe3c4; --accent-fg: #04201a; --dim: #ffb454;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  body {
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    color: var(--fg);
+    font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+  }
+  a { color: inherit; }
+  p { margin: 0; }
+  h1, h2, h3 { font-family: var(--font-display); margin: 0; line-height: 1.08; text-wrap: balance; letter-spacing: -0.01em; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .wrap { max-width: 1120px; margin-inline: auto; padding-inline: 20px; }
+  .mono { font-family: var(--font-mono); }
+  .tag { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); font-weight: 500; }
+
+  /* Header */
+  header.top {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    background: var(--bg); border-bottom: 1px solid var(--line);
+  }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px 24px; padding-block: 12px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--font-display); font-weight: 700; font-size: 22px; letter-spacing: 0.02em; }
+  .brand b { color: var(--accent); font-weight: 700; }
+  .logo { width: 32px; height: 32px; flex: none; }
+  nav { display: flex; gap: 22px; flex-wrap: wrap; font-size: 15px; font-weight: 500; }
+  nav a { text-decoration: none; color: var(--muted); }
+  nav a:hover { color: var(--accent); }
+
+  /* Hero */
+  .hero { padding-block: 56px 72px; }
+  .hero .wrap { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+  .hero h1 { font-size: clamp(2.3rem, 5.2vw, 3.9rem); font-weight: 700; margin-top: 16px; }
+  .hero h1 span { color: var(--accent); }
+  .lead { margin-top: 22px; font-size: 19px; color: var(--muted); max-width: 50ch; }
+  .actions { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 12px 22px; font-family: var(--font-display); font-weight: 600; font-size: 15px; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; border: 1.5px solid var(--accent); clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
+  .btn.primary { background: var(--accent); color: var(--accent-fg); }
+  .btn.primary:hover { filter: brightness(1.1); }
+  .btn.ghost { color: var(--accent); }
+  .btn.ghost:hover { background: var(--surface); }
+
+  .sheet { border: 1.5px solid var(--fg); background: var(--surface); min-width: 0; }
+  .sheet svg { display: block; width: 100%; height: auto; }
+  .tb { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1.5px solid var(--fg); }
+  .tb div { padding: 9px 12px; border-right: 1px solid var(--line); min-width: 0; }
+  .tb div:last-child { border-right: 0; }
+  .tb .k { display: block; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .tb .v { display: block; font-family: var(--font-display); font-weight: 600; font-size: 15px; overflow-wrap: anywhere; }
+  .ln { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+  .fc { fill: var(--accent); fill-opacity: 0.1; stroke: var(--accent); stroke-width: 1.6; stroke-linejoin: round; }
+  .fc2 { fill: var(--accent); fill-opacity: 0.22; stroke: var(--accent); stroke-width: 1.6; stroke-linejoin: round; }
+  .ax { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 8 4 2 4; }
+  .dm { fill: none; stroke: var(--dim); stroke-width: 1.2; }
+  .dt { fill: var(--dim); font-family: var(--font-mono); font-size: 11px; }
+  .nt { fill: var(--muted); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; }
+  .jt { fill: var(--surface); stroke: var(--accent); stroke-width: 1.6; }
+  .eye { fill: var(--accent); }
+
+  /* Sections */
+  section { padding-block: 76px; border-top: 1px solid var(--line); background: var(--bg); }
+  section.plain { background: var(--bg); }
+  section.tint { background: var(--surface); }
+  .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 40px; margin-bottom: 40px; align-items: end; }
+  .head h2 { font-size: clamp(1.8rem, 3.8vw, 2.7rem); font-weight: 700; margin-top: 12px; }
+  .head p { color: var(--muted); max-width: 54ch; }
+
+  .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 0; border: 1.5px solid var(--fg); background: var(--surface); }
+  .svc { padding: 28px; display: flex; flex-direction: column; gap: 14px; border-right: 1px solid var(--line); min-width: 0; }
+  .svc:last-child { border-right: 0; }
+  .svc svg { width: 40px; height: 40px; color: var(--accent); }
+  .svc h3 { font-size: 24px; font-weight: 700; }
+  .svc p { color: var(--muted); font-size: 16px; }
+  .svc ul { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; font-size: 15px; }
+  .svc li { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; }
+  .svc li::before { content: ""; width: 7px; height: 7px; margin-top: 8px; background: var(--accent); transform: rotate(45deg); }
+
+  .spec { border: 1.5px solid var(--fg); background: var(--surface); overflow-x: auto; }
+  .spec table { width: 100%; border-collapse: collapse; min-width: 560px; }
+  .spec th { text-align: left; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 12px 20px; border-bottom: 1.5px solid var(--fg); }
+  .spec td { padding: 16px 20px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 16px; }
+  .spec tr:last-child td { border-bottom: 0; }
+  .spec td:first-child { font-family: var(--font-display); font-weight: 600; font-size: 18px; }
+  .spec td.fmt { font-family: var(--font-mono); font-size: 13px; color: var(--accent); white-space: nowrap; }
+  .spec td.d { color: var(--muted); }
+
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; margin: 0; padding: 0; list-style: none; counter-reset: s; }
+  .steps li { counter-increment: s; padding: 0 28px 0 0; position: relative; min-width: 0; }
+  .steps li::before { content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; font-family: var(--font-mono); font-weight: 500; color: var(--accent-fg); background: var(--accent); margin-bottom: 18px; clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
+  .steps h3 { font-size: 21px; font-weight: 700; margin-bottom: 8px; }
+  .steps p { color: var(--muted); font-size: 16px; }
+
+  .about { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 56px; }
+  .about h2 { font-size: clamp(1.8rem, 3.8vw, 2.7rem); font-weight: 700; margin-block: 12px 22px; }
+  .about p + p { margin-top: 16px; }
+  .for { margin: 0; padding: 0; list-style: none; border-top: 1.5px solid var(--fg); align-self: start; }
+  .for li { padding-block: 14px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; }
+  .for .k { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); padding-top: 4px; }
+  .for .v { font-weight: 500; }
+
+  .contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: start; }
+  .contact h2 { font-size: clamp(1.9rem, 4.2vw, 3rem); font-weight: 700; margin-top: 12px; }
+  .mail { margin-top: 26px; border: 1.5px solid var(--fg); background: var(--surface); padding: 18px 20px; display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .mail .k { display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .mail .addr { font-family: var(--font-mono); font-size: 16px; font-weight: 500; overflow-wrap: anywhere; }
+  .copy { font-family: var(--font-display); font-size: 14px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; background: transparent; color: var(--accent); border: 1.5px solid var(--accent); padding: 7px 16px; cursor: pointer; }
+  .copy:hover { background: var(--bg); }
+  .site { margin-top: 12px; font-family: var(--font-mono); font-size: 14px; color: var(--muted); }
+  .check { border: 1.5px solid var(--fg); background: var(--surface); padding: 24px; }
+  .check h3 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .check > p { color: var(--muted); font-size: 15px; margin-bottom: 14px; }
+  .check ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; }
+  .check li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; padding-block: 10px; border-top: 1px dashed var(--line); font-size: 16px; }
+  .check li::before { content: ""; width: 14px; height: 14px; margin-top: 6px; border: 1.5px solid var(--accent); }
+
+  footer.foot { border-top: 1.5px solid var(--fg); background: var(--surface); padding-block: 26px; font-size: 14px; color: var(--muted); }
+  footer.foot .wrap { display: flex; justify-content: space-between; gap: 10px 24px; flex-wrap: wrap; align-items: center; }
+  footer.foot .brand { font-size: 18px; color: var(--fg); }
+  footer.foot .logo { width: 24px; height: 24px; }
+
+  @media (max-width: 860px) {
+    .hero { padding-block: 36px 52px; }
+    .hero .wrap, .head, .about, .contact { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    section { padding-block: 52px; }
+    .head { margin-bottom: 28px; }
+    .svc { border-right: 0; border-bottom: 1px solid var(--line); }
+    .svc:last-child { border-bottom: 0; }
+  }
+  @media (max-width: 480px) {
+    nav { gap: 16px; font-size: 14px; }
+    .tb { grid-template-columns: minmax(0, 1fr); }
+    .tb div { border-right: 0; border-bottom: 1px solid var(--line); }
+    .tb div:last-child { border-bottom: 0; }
+    .for li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo" viewBox="0 0 32 32">
+      <path d="M16 2l9 7 2 12-11 9-11-9 2-12z" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M16 2v28" stroke="var(--accent)" stroke-width="1.2" opacity="0.55"/>
+      <path d="M7 21l9-3 9 3" fill="none" stroke="var(--accent)" stroke-width="1.2" opacity="0.55"/>
+      <path d="M10 11l4 2M22 11l-4 2" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#atas" id="atas" aria-label="Lizard ID, ke atas">
+      <svg class="logo" aria-hidden="true"><use href="#logo"/></svg>
+      <span>LIZARD<b>.ID</b></span>
+    </a>
+    <nav aria-label="Menu utama">
+      <a href="#layanan">Layanan</a>
+      <a href="#hasil">Hasil kerja</a>
+      <a href="#alur">Alur</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#kontak">Kontak</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <p class="tag">Technical engineering · Drafter · RAB</p>
+        <h1>Gambar teknik yang rapi, <span>RAB yang bisa dipertanggungjawabkan.</span></h1>
+        <p class="lead">Lizard ID membantu kontraktor, developer, dan pemilik bangunan lewat konsultasi teknik, jasa drafter, dan perhitungan Rencana Anggaran Biaya.</p>
+        <div class="actions">
+          <a class="btn primary" href="#kontak">Mulai konsultasi</a>
+          <a class="btn ghost" href="#layanan">Lihat layanan</a>
+        </div>
+      </div>
+
+      <figure class="sheet" style="margin:0" aria-label="Gambar teknik logo Lizard ID">
+        <svg viewBox="0 0 400 420" role="img" aria-label="Gambar teknik kadal tampak atas dengan garis dimensi">
+          <!-- centre axis -->
+          <line class="ax" x1="200" y1="14" x2="200" y2="404"/>
+          <line class="ax" x1="40" y1="170" x2="360" y2="170"/>
+          <!-- tail segments -->
+          <polygon class="fc" points="165,250 235,250 226,292 174,292"/>
+          <polygon class="fc" points="174,292 226,292 217,330 183,330"/>
+          <polygon class="fc" points="183,330 217,330 209,362 191,362"/>
+          <polygon class="fc2" points="191,362 209,362 200,396"/>
+          <!-- body -->
+          <polygon class="fc" points="174,100 226,100 246,138 252,200 240,250 160,250 148,200 154,138"/>
+          <polyline class="ln" points="154,138 246,138"/>
+          <polyline class="ln" points="150,170 250,170"/>
+          <polyline class="ln" points="148,200 252,200"/>
+          <polyline class="ln" points="156,226 244,226"/>
+          <polyline class="ln" points="200,138 174,170 200,200 226,170 200,138"/>
+          <!-- head -->
+          <polygon class="fc2" points="200,38 224,62 230,100 170,100 176,62"/>
+          <polyline class="ln" points="176,62 224,62"/>
+          <path class="ln" d="M186 70l6 3M214 70l-6 3" stroke-width="3.2"/>
+          <!-- legs -->
+          <polyline class="ln" points="152,124 112,102 84,130 62,124"/>
+          <polyline class="ln" points="248,124 288,102 316,130 338,124"/>
+          <polyline class="ln" points="150,222 108,240 88,282 62,288"/>
+          <polyline class="ln" points="250,222 292,240 312,282 338,288"/>
+          <polyline class="ln" points="62,124 54,112 58,134 70,140" />
+          <polyline class="ln" points="338,124 346,112 342,134 330,140" />
+          <polyline class="ln" points="62,288 54,276 58,298 72,300" />
+          <polyline class="ln" points="338,288 346,276 342,298 328,300" />
+          <circle class="jt" cx="112" cy="102" r="4.5"/><circle class="jt" cx="84" cy="130" r="4.5"/>
+          <circle class="jt" cx="288" cy="102" r="4.5"/><circle class="jt" cx="316" cy="130" r="4.5"/>
+          <circle class="jt" cx="108" cy="240" r="4.5"/><circle class="jt" cx="88" cy="282" r="4.5"/>
+          <circle class="jt" cx="292" cy="240" r="4.5"/><circle class="jt" cx="312" cy="282" r="4.5"/>
+          <!-- dimensions -->
+          <line class="dm" x1="22" y1="38" x2="22" y2="396"/>
+          <line class="dm" x1="16" y1="38" x2="28" y2="38"/><line class="dm" x1="16" y1="396" x2="28" y2="396"/>
+          <text class="dt" transform="translate(40 226) rotate(-90)" text-anchor="middle">L = 358</text>
+          <line class="dm" x1="148" y1="410" x2="252" y2="410"/>
+          <line class="dm" x1="148" y1="404" x2="148" y2="416"/><line class="dm" x1="252" y1="404" x2="252" y2="416"/>
+          <text class="dt" x="262" y="414">B = 104</text>
+          <text class="nt" x="300" y="40">TAMPAK ATAS</text>
+          <text class="nt" x="300" y="54">SKALA 1:1</text>
+        </svg>
+        <div class="tb">
+          <div><span class="k">Perusahaan</span><span class="v">Lizard ID</span></div>
+          <div><span class="k">Gambar</span><span class="v">Logo, tampak atas</span></div>
+          <div><span class="k">Situs</span><span class="v">lizard.my.id</span></div>
+        </div>
+      </figure>
+    </div>
+  </div>
+
+  <section class="tint" id="layanan">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="tag">Layanan</p>
+          <h2>Tiga layanan, satu alur dari gambar sampai biaya.</h2>
+        </div>
+        <p>Bisa diambil satu per satu. Kalau digabung, gambar dan RAB dikerjakan dari data yang sama sehingga angkanya selalu cocok.</p>
+      </div>
+      <div class="services">
+        <article class="svc">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="20" cy="20" r="14"/><path d="M20 10v10l7 4"/><path d="M4 20h4M32 20h4M20 4v4M20 32v4"/></svg>
+          <h3>Konsultasi teknik</h3>
+          <p>Teman berpikir sebelum proyek berjalan, supaya keputusan teknis tidak berubah mahal di lapangan.</p>
+          <ul>
+            <li>Tinjauan desain dan metode pelaksanaan</li>
+            <li>Pemilihan material dan spesifikasi</li>
+            <li>Efisiensi biaya tanpa menurunkan mutu</li>
+            <li>Pendampingan dokumen teknis</li>
+          </ul>
+        </article>
+        <article class="svc">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 34L30 10l4 4L10 38H6z"/><path d="M26 14l4 4"/><path d="M6 6h14M6 6v14"/></svg>
+          <h3>Jasa drafter</h3>
+          <p>Gambar kerja yang konsisten, terbaca kontraktor, dan siap dilampirkan ke dokumen tender atau perizinan.</p>
+          <ul>
+            <li>Denah, tampak, potongan, dan detail</li>
+            <li>Gambar dari sketsa atau hasil survei</li>
+            <li>Perapihan dan konversi gambar lama</li>
+            <li>Gambar as-built setelah pekerjaan selesai</li>
+          </ul>
+        </article>
+        <article class="svc">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="4" width="26" height="32" rx="2"/><path d="M12 11h16M12 18h5M12 24h5M12 30h5M23 18h5M23 24h5M23 30h5"/></svg>
+          <h3>Hitung RAB</h3>
+          <p>Rencana Anggaran Biaya yang disusun dari volume nyata di gambar, bukan perkiraan kasar per meter persegi.</p>
+          <ul>
+            <li>Perhitungan volume tiap item pekerjaan</li>
+            <li>Analisis harga satuan pekerjaan (AHSP)</li>
+            <li>RAB per item dan rekapitulasi</li>
+            <li>Bill of Quantity untuk tender</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="hasil">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="tag">Hasil kerja</p>
+          <h2>Yang Anda terima di akhir pekerjaan.</h2>
+        </div>
+        <p>File dikirim dalam format yang bisa langsung dibuka, diedit, dan dicetak oleh tim Anda sendiri.</p>
+      </div>
+      <div class="spec">
+        <table>
+          <thead><tr><th>Dokumen</th><th>Format</th><th>Isi</th></tr></thead>
+          <tbody>
+            <tr><td>Gambar kerja</td><td class="fmt">DWG · PDF</td><td class="d">Layer tertata, skala dan kop gambar seragam, siap cetak ukuran A3 atau A1.</td></tr>
+            <tr><td>Perhitungan volume</td><td class="fmt">XLSX</td><td class="d">Tabel quantity per item pekerjaan beserta rumus dan sumber ukurannya.</td></tr>
+            <tr><td>RAB dan rekapitulasi</td><td class="fmt">XLSX · PDF</td><td class="d">Harga satuan, jumlah harga, dan rekap per divisi pekerjaan.</td></tr>
+            <tr><td>Analisis harga satuan</td><td class="fmt">XLSX</td><td class="d">Rincian koefisien bahan, upah, dan alat untuk tiap item.</td></tr>
+            <tr><td>Catatan asumsi</td><td class="fmt">PDF</td><td class="d">Daftar asumsi dan hal di luar lingkup, agar tidak ada kejutan saat pelaksanaan.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="tint" id="alur">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="tag">Alur kerja</p>
+          <h2>Empat langkah, jelas dari awal.</h2>
+        </div>
+        <p>Lingkup dan biaya disepakati sebelum pengerjaan dimulai, jadi tidak ada tagihan yang muncul belakangan.</p>
+      </div>
+      <ol class="steps">
+        <li><h3>Kirim data</h3><p>Kirim sketsa, gambar lama, foto lokasi, atau kebutuhan Anda lewat email.</p></li>
+        <li><h3>Sepakati lingkup</h3><p>Kami konfirmasi apa yang dikerjakan, waktunya, dan biayanya secara tertulis.</p></li>
+        <li><h3>Pengerjaan dan revisi</h3><p>Draf dikirim untuk ditinjau. Revisi dikerjakan sesuai kesepakatan.</p></li>
+        <li><h3>Serah terima</h3><p>File final dikirim lengkap, termasuk file editable yang bisa Anda kembangkan sendiri.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="tentang">
+    <div class="wrap about">
+      <div>
+        <p class="tag">Tentang Lizard ID</p>
+        <h2>Fokus pada dua hal: gambar dan angka.</h2>
+        <p>Lizard ID adalah layanan technical engineering yang mengerjakan gambar teknik dan perhitungan biaya konstruksi. Dua hal ini sering dikerjakan terpisah, lalu hasilnya tidak cocok satu sama lain.</p>
+        <p>Kami menyusun keduanya dari satu sumber data. Setiap angka di RAB bisa ditelusuri ke volume di gambar, dan setiap perubahan gambar bisa langsung dihitung ulang dampaknya.</p>
+      </div>
+      <ul class="for">
+        <li><span class="k">Untuk</span><span class="v">Kontraktor dan pemborong</span></li>
+        <li><span class="k">Untuk</span><span class="v">Developer dan pemilik proyek</span></li>
+        <li><span class="k">Untuk</span><span class="v">Pemilik rumah, ruko, dan renovasi</span></li>
+        <li><span class="k">Untuk</span><span class="v">Konsultan yang butuh tenaga drafter tambahan</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="tint" id="kontak">
+    <div class="wrap contact">
+      <div>
+        <p class="tag">Kontak</p>
+        <h2>Kirim kebutuhan proyek Anda.</h2>
+        <p class="lead">Kirim lewat email dengan data seperti daftar di samping. Semakin lengkap, semakin cepat kami bisa memberi penawaran.</p>
+        <div class="mail">
+          <div>
+            <span class="k">Email</span>
+            <span class="addr" id="v-email">fazhaf26@lizard.my.id</span>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn primary" href="mailto:fazhaf26@lizard.my.id" style="padding:8px 18px">Tulis email</a>
+            <button class="copy" type="button" id="copy-btn">Salin</button>
+          </div>
+        </div>
+        <p class="site">lizard.my.id</p>
+      </div>
+      <div class="check">
+        <h3>Data yang membantu penawaran</h3>
+        <p>Tidak harus lengkap. Kirim yang ada dulu.</p>
+        <ul>
+          <li>Jenis pekerjaan: gambar, RAB, atau konsultasi</li>
+          <li>Jenis dan fungsi bangunan</li>
+          <li>Lokasi dan perkiraan luas</li>
+          <li>Sketsa, gambar lama, atau foto kondisi lapangan</li>
+          <li>Spesifikasi material kalau sudah ada</li>
+          <li>Target waktu penyelesaian</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="brand"><svg class="logo" aria-hidden="true"><use href="#logo"/></svg><span>LIZARD<b>.ID</b></span></span>
+    <span>© 2026 Lizard ID · Technical Engineering</span>
+    <span class="mono">lizard.my.id</span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var btn = document.getElementById('copy-btn');
+    var el = document.getElementById('v-email');
+    if (!btn || !el) return;
+    btn.addEventListener('click', function () {
+      var done = function () {
+        btn.textContent = 'Tersalin';
+        setTimeout(function () { btn.textContent = 'Salin'; }, 1500);
+      };
+      var fallback = function () {
+        var r = document.createRange();
+        r.selectNodeContents(el);
+        var s = window.getSelection();
+        s.removeAllRanges();
+        s.addRange(r);
+      };
+      try {
+        navigator.clipboard.writeText(el.textContent.trim()).then(done, fallback);
+      } catch (e) { fallback(); }
+    });
+  })();
+</script>
+
+</body>
+</html>
